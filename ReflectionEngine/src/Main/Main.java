@@ -48,7 +48,7 @@ public class Main {
 		} // for
 
 		if (!isNeededInterface) {
-			p(resource.getString("FileNotContainInterface").replace("<file>", args[0]).replace("<interface>", "CommonInterfaces.StringConvertable"));
+			p(resource.getString("FileNotContainInterface").replace("<file>", args[1]).replace("<interface>", "CommonInterfaces.StringConvertable"));
 			return;
 		}
 
@@ -56,7 +56,7 @@ public class Main {
 		StringConvertable loadedModuleInterface = (StringConvertable) loadedModule;
 
 		FileLoader loader = new FileLoader(args[0]);
-		p(resource.getString("PrintFile").replace("<file", args[0]));
+		p(resource.getString("PrintFile").replace("<file>", args[0]));
 		while (loader.hasNext()) {
 			String str = loader.next();
 			p(resource.getString("ConvertString").replace("<Str1>", str).replace("<Str2>", loadedModuleInterface.convert(str)));
