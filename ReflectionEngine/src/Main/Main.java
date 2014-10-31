@@ -9,20 +9,25 @@ import java.util.Set;
 import CommonInterfaces.StringConvertable;
 import FileLoader.FileLoader;
 import JarLoader.JarLoader;
+import java.util.ResourceBundle;
 
 public class Main {
+	
+	private static ResourceBundle resource; 
+	
 	public static void main(String[] args) throws ClassNotFoundException,
 			FileNotFoundException, IOException, InstantiationException,
 			IllegalAccessException {
 
+		
+		resource = ResourceBundle.getBundle("data_en_EN");
+			
 		if (!isArgsValid(args))
 			return;
 
-		boolean seeHints = false; //для проверки, что все загружается.
+		boolean seeHints = false; 
 
 		JarLoader jarClassLoader = new JarLoader(args[1], "", seeHints);
-		// вместо "" мог бы быть какой-нибудь пакет "com.google.gson.Gson"
-		// тогда загружались бы классы только из него.
 
 		Set<String> setClassNames = jarClassLoader.getCachedClasses();
 		Class<?> currClass = null;
@@ -43,9 +48,7 @@ public class Main {
 		} // for
 
 		if (!isNeededInterface) {
-			p("В файле "
-					+ args[1]
-					+ " не найдено ни одного класса, реализующего интерфейс CommonInterfaces.StringConvertable.");
+			p(resource.getString("FileNotContainInterface").replace("<file>", args[0]).replace("<interface>", "CommonInterfaces.StringConvertable"));
 			return;
 		}
 
@@ -53,24 +56,25 @@ public class Main {
 		StringConvertable loadedModuleInterface = (StringConvertable) loadedModule;
 
 		FileLoader loader = new FileLoader(args[0]);
-		p("Вывод файла " + args[0]);
+		p(resource.getString("PrintFile").replace("<file", args[0]));
 		while (loader.hasNext()) {
 			String str = loader.next();
-			p("'" + str + "' convert to '" + loadedModuleInterface.convert(str)
-					+ "'");
+			p(resource.getString("ConvertString").replace("<Str1>", str).replace("<Str2>", loadedModuleInterface.convert(str)));
 		}
 		loader.close();
 	} // main
 	
 
+	
 	private static final void p(String s) {
 		System.out.println(s);
 	}
-
+	
 
 	private static void printHelpStr() {
-		p("Использование: ");
-		p("ReflectionEngine <Файл_с_текстом> <jar-файл> ");
+		
+		p(resource.getString("HelpStr"));
+		p(resource.getString("HelpStrDescription"));
 	}
 
 	private static final boolean isArgsValid(String[] args) {
@@ -85,33 +89,34 @@ public class Main {
 					|| args[0].equalsIgnoreCase("/?"))
 				printHelpStr();
 			else {
-				p("Неправильный формат команды.");
+				p(resource.getString("ErrCommandFailure"));
 				printHelpStr();
 			}
 			break;
 		case 2:
 			File f1 = new File(args[0]);
 			File f2 = new File(args[1]);
-			if (!f1.exists())
-				p("Файл " + args[0] + " не существует.");
+			if (!f1.exists()){
+				p(resource.getString("FileIsNotExsist").replace("<file>", args[0]));
+			}
 			else if (!f1.canRead())
-				p("Файл " + args[0] + " не может быть прочитан.");
+				p(resource.getString("FileIsNotCanRead").replace("<file>", args[0]));
 			else if (f1.length() == 0)
-				p("Файл " + args[0] + " пустой.");
+				p(resource.getString("FileIsEmpty").replace("<file>", args[0]));
 
 			if (!f2.exists())
-				p("Файл " + args[1] + " не существует.");
+				p(resource.getString("FileIsNotExsist").replace("<file>", args[1]));
 
 			else if (!f2.canRead())
-				p("Файл " + args[1] + " не может быть прочитан.");
+				p(resource.getString("FileIsNotCanRead").replace("<file>", args[1]));
 			else if (f2.length() == 0)
-				p("Файл " + args[1] + " пустой.");
+				p(resource.getString("FileIsNotExsist").replace("<file>", args[1]));
 
 			res = f1.exists() && f1.canRead() && f1.length() > 0 && f2.exists()
 					&& f2.canWrite() && f2.length() > 0;
 			break;
 		default:
-			p("Неправильный формат команды.");
+			p(resource.getString("ErrCommandFailure"));
 			printHelpStr();
 			break;
 		}

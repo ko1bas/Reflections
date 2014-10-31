@@ -18,7 +18,8 @@ ReflectionEngine - основной проект. Получает классы из jar-файла, ищет в нем пер
 
 ReflectionFirstModule и ReflectionSecondModule - плагины. Реализуют интерфейс StringConvertable.
 
-Папка jars содержит все скомпилированные файлы.
+Папка jars содержит все скомпилированные файлы, файл input.txt и файлы локализации. ReflectionEngine.jar настроен на зарузку data_en_EN.properties.
+В файле data.properties с русским текстом проблема с кодировкой.
 
 Запуск: 
 	java -jar ReflectionEngine.jar input.txt module1.jar
